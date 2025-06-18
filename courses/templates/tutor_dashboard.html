@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tutor Dashboard</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb, #ebedee);
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            max-width: 960px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #34495e;
+            border-left: 6px solid #9b59b6;
+            padding-left: 12px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #fef6ff;
+            padding: 20px 25px;
+            margin-bottom: 15px;
+            border-left: 5px solid #9b59b6;
+            border-radius: 12px;
+            transition: 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #f3eaff;
+            transform: scale(1.02);
+        }
+
+        .course-link {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .course-link:hover {
+            color: #8e44ad;
+        }
+
+        .no-courses {
+            color: #e74c3c;
+            font-weight: bold;
+            padding: 10px;
+            background-color: #ffecec;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+        }
+
+        .create-btn {
+            display: inline-block;
+            background-color: #9b59b6;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-btn:hover {
+            background-color: #8e44ad;
+        }
+
+        @media screen and (max-width: 600px) {
+            .dashboard-container {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome, {{ user.username }}</h1>
+        <div class="subtitle">(Tutor Dashboard)</div>
+
+        <h3>📚 Your Courses</h3>
+        <ul>
+            {% for course in courses %}
+                <li>
+                    <a href="{% url 'course_detail' course.id %}" class="course-link">{{ course.title }}</a>
+                </li>
+            {% empty %}
+                <li class="no-courses">You haven't created any courses yet.</li>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'create_course' %}" class="create-btn">+ Create New Course</a>
+    </div>
+</body>
+</html>

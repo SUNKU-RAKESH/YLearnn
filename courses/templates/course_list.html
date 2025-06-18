@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Courses</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f2f4f7;
+            color: #2d3436;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            padding: 20px 30px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .navbar a {
+            background-color: #e74c3c;
+            padding: 10px 16px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #c0392b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        /* Search + Sort */
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .filter-form input[type="text"],
+        .filter-form select {
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .filter-form button {
+            padding: 12px 20px;
+            background-color: #0984e3;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-form button:hover {
+            background-color: #056bb0;
+        }
+
+        /* Courses Grid */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .course-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .course-content {
+            padding: 16px;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2d3436;
+        }
+
+        .course-title a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .course-title a:hover {
+            color: #0984e3;
+        }
+
+        .course-description {
+            font-size: 14px;
+            color: #636e72;
+            margin-bottom: 12px;
+            height: 42px;
+            overflow: hidden;
+        }
+
+        .course-meta {
+            font-size: 14px;
+            color: #2f3640;
+            margin-bottom: 6px;
+        }
+
+        .badge-rating {
+            display: inline-block;
+            background-color: #f1c40f;
+            color: #2d3436;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .create-course-link {
+            margin-top: 40px;
+            display: inline-block;
+            background-color: #27ae60;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .create-course-link:hover {
+            background-color: #219150;
+        }
+
+        .no-courses {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .filter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <div class="navbar">
+        <h2>Welcome, {{ request.user.username }}</h2>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h3>Explore Our Top Courses</h3>
+
+        <!-- Search and Sort -->
+        <form method="get" action="" class="filter-form">
+            <input type="text" name="search" value="{{ request.GET.search }}" placeholder="Search by course name or description...">
+            <select name="sort">
+                <option value="">Sort By</option>
+                <option value="rating" {% if request.GET.sort == "rating" %}selected{% endif %}>Rating (High to Low)</option>
+                <option value="default" {% if request.GET.sort == "default" %}selected{% endif %}>Newest First</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Courses Display -->
+        {% if courses %}
+        <div class="course-grid">
+            {% for course in courses %}
+                <div class="course-card">
+                    {% if course.thumbnail %}
+                        <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">
+                    {% else %}
+                        <img src="https://via.placeholder.com/300x160.png?text=No+Image" alt="No Thumbnail">
+                    {% endif %}
+                    <div class="course-content">
+                        <div class="course-title">
+                            <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+                        </div>
+                        <div class="course-description">{{ course.description }}</div>
+                        <div class="course-meta"><strong>Price:</strong> ₹{{ course.price }}</div>
+                        <div class="course-meta">
+                            <span class="badge-rating">
+                                ★ {{ course.avg_rating|floatformat:1|default:"No ratings" }}/5
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p class="no-courses">No courses found for your search.</p>
+        {% endif %}
+
+        {% if request.user.profile.role == 'tutor' %}
+            <a href="{% url 'create_course' %}" class="create-course-link">+ Create New Course</a>
+        {% endif %}
+    </div>
+
+</body>
+</html>
+
+

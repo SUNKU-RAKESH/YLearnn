@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Video</title>
+</head>
+<body>
+    <h2>Upload Video to {{ course.title }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Title:</label><br>
+        <input type="text" name="title" required><br><br>
+
+        <label>Video File:</label><br>
+        <input type="file" name="video_file" accept="video/*" required><br><br>
+
+        <button type="submit">Upload</button>
+    </form>
+    <br>
+    <a href="{% url 'course_detail' course.pk %}">Back to Course</a>
+</body>
+</html>

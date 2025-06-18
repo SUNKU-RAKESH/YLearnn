@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Course</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa, #e8eaf6);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #6c5ce7;
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        input[type="file"] {
+            padding: 12px 15px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #6c5ce7;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2d3436;
+        }
+
+        button[type="submit"] {
+            background-color: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #5e54d6;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #6c5ce7;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px;
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Course</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="title">Course Title</label>
+            <input type="text" name="title" id="title" placeholder="e.g. Python for Beginners" required>
+
+            <label for="description">Course Description</label>
+            <textarea name="description" id="description" placeholder="Describe your course..." required></textarea>
+
+            <label for="thumbnail">Course Thumbnail (optional)</label>
+            <input type="file" name="thumbnail" id="thumbnail" accept="image/*">
+
+            <label for="price">Price (USD)</label>
+            <input type="number" name="price" id="price" step="0.01" min="0" value="0">
+
+            <button type="submit">Create Course</button>
+        </form>
+        <a href="{% url 'course_list' %}" class="back-link">← Back to Courses</a>
+    </div>
+</body>
+</html>
